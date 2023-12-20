@@ -11,6 +11,9 @@ const CommentContent = (props) => {
     const [nickName, setNickName] = useState('');
     const [password, setPassword] = useState('');
 
+
+
+
     useEffect(() => {
         setComment(props.comment.comment);
         setNickName(props.comment.nickName);
@@ -40,38 +43,61 @@ const CommentContent = (props) => {
             password: password,
             commentId: props.comment._id,
         }
-
-        axios.post("/api/comment/edit", body).then((response) => {
+        axios.post("/api/comment/edit", body)
+        .then((response) => {
             if (response.data.success) {
                 alert("댓글 수정이 완료되었습니다.");
+                props.comment.comment = comment;
             } else {
                 alert("댓글 수정이 실패하였습니다.");
             }
-            return window.location.reload();
+            setEditFlag(false); 
+            setModalFlag(false); 
         })
+        .catch((error) => {
+            console.error("댓글 수정 요청 실패:", error);
+        });
+        // axios.post("/api/comment/edit", body).then((response) => {
+        //     if (response.data.success) {
+        //         alert("댓글 수정이 완료되었습니다.");
+        //     } else {
+        //         alert("댓글 수정이 실패하였습니다.");
+        //     }
+        //     return window.location.reload();
+        // })
     }
 
     const DeleteHandler = (e) => {
-        e.preventDefault();
-        if (window.confirm("정말로 삭제하시겠습니까?")) {
+    e.preventDefault();
+    const enteredPassword = prompt('비밀번호를 입력해주세요:');
+    if (enteredPassword === props.comment.password) {
+        if (window.confirm('정말로 삭제하시겠습니까?')) {
             let body = {
                 comment: comment,
                 nickName: nickName,
-                password: password
-            }
+                password: password,
+                commentId: props.comment._id,
+            };
 
-            axios.post("/api/comment/delete", body).then((response) => {
-                if (response.data.success) {
-                    alert("댓글이 삭제되었습니다.");
-                    window.location.reload();
-                }
-            })
+            axios
+                .post('/api/comment/delete', body)
+                .then((response) => {
+                    if (response.data.success) {
+                        alert('댓글이 삭제되었습니다.');
+                        // window.location.reload();
+                        props.comment.comment = comment;
+                    }
+                })
                 .catch((err) => {
                     console.log(err);
-                    alert("댓글 삭제 실패")
-                })
+                    alert('댓글 삭제 실패');
+                });
         }
+    } else {
+        alert('비밀번호가 일치하지 않습니다.');
+        setEditFlag(false);
     }
+};
 
     return (
         <div className="comment_view ko">
@@ -121,7 +147,9 @@ const CommentContent = (props) => {
                                 </button>
                                 <button
                                     className="delete"
-                                    onClick={(e) => DeleteHandler(e)}
+                                    onClick={(e) => {
+                                        DeleteHandler(e);
+                                    }}
                                 >
                                     <RiDeleteBin6Line />
                                 </button>

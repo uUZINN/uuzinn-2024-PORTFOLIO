@@ -3,7 +3,10 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 
 export function work() {
     gsap.registerPlugin(ScrollTrigger);
-
+    ScrollTrigger.normalizeScroll({
+        allowNestedScroll: true
+      });
+    
 
     gsap.to(".parallax__item__bike", {
         xPercent: 130,

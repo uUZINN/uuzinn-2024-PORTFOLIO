@@ -3,6 +3,7 @@ import CommentList from './CommentList'
 import CommentWrite from './CommentWrite'
 
 const CommentArea = () => {
+
     return (
         <div>
             <CommentList />

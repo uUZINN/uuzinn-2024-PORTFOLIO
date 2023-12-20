@@ -6,10 +6,12 @@ const CommentWrite = () => {
     const [nickName, setNickName] = useState("");
     const [password, setPassword] = useState("");
 
+
+
     const SubmitHandler = (e) => {
         e.preventDefault();
 
-        if (!comment && !nickName && !password) {
+        if (!comment || !nickName || !password) {
             return alert("이름, 비밀번호, 내용을 모두 적어주세요✨");
         }
 
@@ -19,10 +21,19 @@ const CommentWrite = () => {
             password: password
         }
 
+        
         axios.post("/api/comment/submit", body).then((response) => {
             if (response.data.success) {
+                response.data.comment = comment;
+                console.log(comment)
+                
                 alert("소중한 댓글 감사합니다! 😎")
-                window.location.reload();
+                //window.location.reload();
+
+                
+                setComment('');
+                setNickName('');
+                setPassword('');
             } else {
                 alert("댓글 작성 실패!!!!")
             }
@@ -60,7 +71,12 @@ const CommentWrite = () => {
                 />
                 <span>03</span>
             </label>
-            <button onClick={(e) => { SubmitHandler(e) }}>SEND IT!</button>
+            <button 
+            onClick={(e) => { 
+                SubmitHandler(e)
+                }}>
+                    SEND IT!
+            </button>
         </div>
     )
 }
