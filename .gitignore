@@ -4,3 +4,5 @@ server/config/dev.js
 
 client/node_modules
 client/package-lock.json
+
+client/build
