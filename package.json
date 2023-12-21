@@ -10,7 +10,7 @@
     "start": "cd server && npm run start",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "parcel build index.html",
-    "parcel": "index.html"
+    "parcel": "parcel index.html"
   },
   "author": "",
   "license": "ISC",
